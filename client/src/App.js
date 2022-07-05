@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import { Microphone } from 'phosphor-react'
 import axios from 'axios'
+import SpeechRecognition, {
+  useSpeechRecognition
+} from 'react-speech-recognition'
 import Navbar from './components/Navbar'
 import FinalPage from './components/FinalPage'
 import Footer from './components/Footer'
@@ -59,6 +62,13 @@ function App() {
     )
   }, [])
 
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition
+  } = useSpeechRecognition()
+
   const SpecialInp = ({ typeOfInput }) => {
     return (
       <span className='inline-block pl-3 pr-3'>
@@ -70,7 +80,13 @@ function App() {
             name='queryText'
             placeholder={typeOfInput}
           />
-          <Microphone />
+          <Microphone
+            onClick={
+              listening
+                ? SpeechRecognition.stopListening
+                : SpeechRecognition.startListening
+            }
+          />
         </div>
       </span>
     )
@@ -206,7 +222,17 @@ function App() {
           />
         </div>
       </div>
-      <FinalPage listOfLinks={listOfLinks} listOfText={listOfText} />
+      <a href='#result' className='flex justify-center'>
+        <button className='text-4xl rounded-xl hover:border-[4px] border-white bg-gradient-to-r p-2 from-[#7928ca] to-[#ff0080] transition-all duration-300 hover:from-[#ff0080] hover:to-[#5451ff]'>
+          Storify!
+        </button>
+      </a>
+      <div id='result' className='h-[3.5rem]'></div>
+      <FinalPage
+        id='result'
+        listOfLinks={listOfLinks}
+        listOfText={listOfText}
+      />
       <Footer />
     </div>
   )
