@@ -36,16 +36,21 @@ function App() {
     axios.post(path, queryObj).then(res => {
       let result = res.data
       let imglink = result.output_link
-      console.log(imglink.image)
       setImageLink1(imglink.image)
     })
   }
 
   let queryObj = null
   const handleClick = n => {
-    queryObj = { queryText: document.getElementById(`text_${n}`).value }
+    queryObj = { queryText: document.getElementById('text_3').innerHTML }
+    console.log(document.getElementById('text_3').value)
     console.log(queryObj)
-    makePostRequest('/getimg', queryObj, n)
+    //makePostRequest('/getimg', queryObj, n)
+  }
+
+  const [active, setActive] = useState(false)
+  const handleStorifyButton = () => {
+    setActive(!active)
   }
 
   const [data, setdata] = useState({
@@ -195,10 +200,11 @@ function App() {
           <div>
             <div className='text-[28px]'>
               {/*This is where a sentence will be made*/}
-              <div id='text_3' className='leading-[4rem] pl-3'>
-                The cave was mostly dark, but inside it she saw something
-                <SpecialInp typeOfInput={'Adjective'} />
-                .3
+              <div className='leading-[4rem] pl-3'>
+                <p id='text_3'>
+                  The cave was mostly dark, but inside it she saw something
+                  <SpecialInp typeOfInput={'Adjective'} />
+                </p>
               </div>
               {/*This is where a sentence will be ended*/}
             </div>
@@ -223,16 +229,21 @@ function App() {
         </div>
       </div>
       <a href='#result' className='flex justify-center'>
-        <button className='text-4xl rounded-xl hover:border-[4px] border-white bg-gradient-to-r p-2 from-[#7928ca] to-[#ff0080] transition-all duration-300 hover:from-[#ff0080] hover:to-[#5451ff]'>
+        <button
+          className='text-4xl rounded-xl hover:border-[4px] border-white bg-gradient-to-r p-2 from-[#7928ca] to-[#ff0080] transition-all duration-300 hover:from-[#ff0080] hover:to-[#5451ff]'
+          onClick={handleStorifyButton}
+        >
           Storify!
         </button>
       </a>
       <div id='result' className='h-[3.5rem]'></div>
-      <FinalPage
-        id='result'
-        listOfLinks={listOfLinks}
-        listOfText={listOfText}
-      />
+      {active ? (
+        <FinalPage
+          id='result'
+          listOfLinks={listOfLinks}
+          listOfText={listOfText}
+        />
+      ) : undefined}
       <Footer />
     </div>
   )

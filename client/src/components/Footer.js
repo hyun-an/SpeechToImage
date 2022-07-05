@@ -5,8 +5,7 @@ const Footer = () => {
         &copy;UCI AI Creative Labs, {new Date().getFullYear()}
       </div>
       <div>
-        Made with care by{' '}
-        <code>Ariel Han, Jasmine Jeong, Ulia Zaman, and Ray An.</code>
+        Made by <code>Ariel Han, Jasmine Jeong, Ulia Zaman, and Ray An.</code>
       </div>
     </div>
   )
