@@ -40,12 +40,6 @@ function App() {
     })
   }
 
-  const replaceAllN = (text, number) => {
-    let replaceText = text
-    console.log(replaceText.includes('\n'))
-    console.log(number)
-  }
-
   let queryObj = null
   const handleClick = n => {
     let stringQuery = document.getElementById(`text_${n}`)?.innerText
