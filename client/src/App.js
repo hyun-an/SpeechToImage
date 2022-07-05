@@ -40,11 +40,21 @@ function App() {
     })
   }
 
+  const replaceAllN = (text, number) => {
+    let replaceText = text
+    console.log(replaceText.includes('\n'))
+    console.log(number)
+  }
+
   let queryObj = null
   const handleClick = n => {
-    queryObj = { queryText: document.getElementById('text_3').innerHTML }
-    console.log(document.getElementById('text_3').value)
-    console.log(queryObj)
+    let stringQuery = document.getElementById(`text_${n}`)?.innerText
+    let numberQuery = document.getElementById(`queryText${n}`).value
+    let count = (stringQuery.match(/\n/g) || []).length
+    console.log(count)
+
+    queryObj = { queryText: stringQuery }
+    console.log('test log')
     //makePostRequest('/getimg', queryObj, n)
   }
 
@@ -74,16 +84,16 @@ function App() {
     browserSupportsSpeechRecognition
   } = useSpeechRecognition()
 
-  const SpecialInp = ({ typeOfInput }) => {
+  const SpecialInp = ({ typeOfInput, n }) => {
     return (
       <span className='inline-block pl-3 pr-3'>
         <div className='flex items-center border-2 border-gray-600 p-1 leading-3 rounded-xl'>
           <input
             className='border-dashed min-w-[80px] max-w-[120px] outline-none text-[28px]'
             type='text'
-            id='queryText'
+            id={`queryText${n}`}
             name='queryText'
-            placeholder={typeOfInput}
+            placeholder={`queryText${n}`}
           />
           <Microphone
             onClick={
@@ -108,7 +118,7 @@ function App() {
               <p id='text_1' className='leading-[4rem] pl-3'>
                 {/*This is where a sentence will be made*/}
                 One day, the mermaid
-                <SpecialInp typeOfInput={'Noun'} />
+                <SpecialInp n={1} typeOfInput={'Noun'} />
                 was swimming when she saw a mysterious cave
                 {/*This is where a sentence will be ended*/}.
               </p>
@@ -116,7 +126,7 @@ function App() {
             <div className='flex justify-center pt-10'>
               <button
                 className='text-[28px] pl-1 pr-1 hover:bg-green-200 border-2 rounded-lg border-gray-700'
-                onClick={handleClick}
+                onClick={() => handleClick(1)}
               >
                 Generate
               </button>
@@ -203,7 +213,7 @@ function App() {
               <div className='leading-[4rem] pl-3'>
                 <p id='text_3'>
                   The cave was mostly dark, but inside it she saw something
-                  <SpecialInp typeOfInput={'Adjective'} />
+                  <SpecialInp id='inp' n={3} typeOfInput={'Adjective'} />
                 </p>
               </div>
               {/*This is where a sentence will be ended*/}
