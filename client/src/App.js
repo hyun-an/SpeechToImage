@@ -42,10 +42,27 @@ function App() {
 
   let queryObj = null
   const handleClick = n => {
-    let stringQuery = document.getElementById(`text_${n}`)?.innerText
-    let numberQuery = document.getElementById(`queryText${n}`).value
+    let stringQuery = '' + document.getElementById(`text_${n}`)?.innerText
+    let numberQuery = document.getElementById(`queryText${n}`)?.value
+    console.log(typeof numberQuery)
     let count = (stringQuery.match(/\n/g) || []).length
-    console.log(count)
+    //console.log(count)
+    //console.log(stringQuery)
+    let result = stringQuery
+    let temp = ''
+    for (let i = 0; i < count; i++) {
+      result = stringQuery.replace('\n', ' ' + numberQuery + ' ')
+      if (result.includes('\n') === false) {
+        temp = result
+        console.log(temp)
+        break
+      }
+      n++
+      numberQuery = '' + document.getElementById(`queryText${n}`)?.value
+    }
+
+    console.log(result)
+    console.log(temp)
 
     queryObj = { queryText: stringQuery }
     console.log('test log')
@@ -136,24 +153,25 @@ function App() {
             height={384}
           />
         </div>
+
         {/*Second oanel*/}
-        <div id='2' className='2 h-screen flex items-center'>
+        <div className='2 h-screen flex items-center'>
           <div>
             <div className='text-[28px]'>
               <p id='text_2' className='leading-[4rem] pl-3'>
                 {/*This is where a sentence will be made*/}
                 She decided to go investigate. Mermaid
-                <SpecialInp typeOfInput={'Adverb'} />
+                <SpecialInp n={2} typeOfInput={'Adverb'} />
                 swam
-                <SpecialInp typeOfInput={'Adverb'} />
-                towards the entrance of the cave.
+                <SpecialInp n={3} typeOfInput={'Adverb'} />
+                towards the entrance of the cave
                 {/*This is where a sentence will be ended*/}.
               </p>
             </div>
             <div className='flex justify-center pt-10'>
               <button
                 className='text-[28px] pl-1 pr-1 hover:bg-green-200 border-2 rounded-lg border-gray-700'
-                onClick={handleClick}
+                onClick={() => handleClick(2)}
               >
                 Generate
               </button>
@@ -163,59 +181,61 @@ function App() {
         <div id='image side' className='flex justify-center items-center'>
           <img
             className='rounded-lg'
-            src={imageLink2}
-            alt={imageLink2}
+            src={imageLink1}
+            alt={imageLink1}
             width={384}
             height={384}
           />
         </div>
-        {/*Third oanel*/}
-        <div id='3' className='2 h-screen flex items-center'>
+
+        {/*Third panel*/}
+        <div className='2 h-screen flex items-center'>
           <div>
             <div className='text-[28px]'>
-              <p id='' className='leading-[4rem] pl-3'>
+              <p id='text_3' className='leading-[4rem] pl-3'>
                 {/*This is where a sentence will be made*/}
                 The cave was mostly dark, but inside it she saw something
-                <SpecialInp typeOfInput={'Adjective'} />
+                <SpecialInp n={4} typeOfInput={'Noun'} />
                 {/*This is where a sentence will be ended*/}.
               </p>
-            </div>
-            <div className='flex justify-center pt-10'>
-              <button
-                className='text-[28px] pl-1 pr-1 hover:bg-green-200 border-2 rounded-lg border-gray-700'
-                onClick={handleClick}
-              >
-                Generate
-              </button>
-            </div>
-          </div>
-        </div>
-        <div id='image side' className='flex justify-center items-center'>
-          <img
-            className='rounded-lg'
-            src={imageLink3}
-            alt={imageLink3}
-            width={384}
-            height={384}
-          />
-        </div>
-        {/*Fourth oanel*/}
-        <div id='3' className='2 h-screen flex items-center'>
-          <div>
-            <div className='text-[28px]'>
-              {/*This is where a sentence will be made*/}
-              <div className='leading-[4rem] pl-3'>
-                <p id='text_3'>
-                  The cave was mostly dark, but inside it she saw something
-                  <SpecialInp id='inp' n={3} typeOfInput={'Adjective'} />
-                </p>
-              </div>
-              {/*This is where a sentence will be ended*/}
             </div>
             <div className='flex justify-center pt-10'>
               <button
                 className='text-[28px] pl-1 pr-1 hover:bg-green-200 border-2 rounded-lg border-gray-700'
                 onClick={() => handleClick(3)}
+              >
+                Generate
+              </button>
+            </div>
+          </div>
+        </div>
+        <div id='image side' className='flex justify-center items-center'>
+          <img
+            className='rounded-lg'
+            src={imageLink1}
+            alt={imageLink1}
+            width={384}
+            height={384}
+          />
+        </div>
+
+        {/*Fourth panel*/}
+        <div className='2 h-screen flex items-center'>
+          <div>
+            <div className='text-[28px]'>
+              <p id='text_4' className='leading-[4rem] pl-3'>
+                {/*This is where a sentence will be made*/}
+                As she entered the cave, she realized she was not alone! There
+                was a
+                <SpecialInp n={5} typeOfInput={'Noun'} />
+                hermit crab watching her
+                {/*This is where a sentence will be ended*/}.
+              </p>
+            </div>
+            <div className='flex justify-center pt-10'>
+              <button
+                className='text-[28px] pl-1 pr-1 hover:bg-green-200 border-2 rounded-lg border-gray-700'
+                onClick={() => handleClick(4)}
               >
                 Generate
               </button>
