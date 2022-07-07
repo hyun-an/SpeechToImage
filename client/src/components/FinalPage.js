@@ -1,4 +1,6 @@
 const FinalPage = ({ listOfLinks, listOfText }) => {
+  console.log('from finalpage links' + listOfLinks)
+  console.log('from finalpage text' + listOfText)
   return (
     <div className='h-screen'>
       <h1 className='text-5xl font-light text-center pb-10'>The Story!</h1>

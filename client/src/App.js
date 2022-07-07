@@ -23,55 +23,83 @@ function App() {
     'https://replicate.com/api/models/borisdayma/dalle-mini/files/7f987d1c-a6c2-4236-a761-6b3b685385d4/output_0.png'
   )
 
-  let listOfLinks = [
-    'https://images.pexels.com/photos/1172253/pexels-photo-1172253.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-    'https://replicate.com/api/models/borisdayma/dalle-mini/files/7f987d1c-a6c2-4236-a761-6b3b685385d4/output_0.png',
-    'https://replicate.com/api/models/borisdayma/dalle-mini/files/7f987d1c-a6c2-4236-a761-6b3b685385d4/output_0.png',
-    'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg'
-  ]
+  const [text1, setText1] = useState('Sentence 1')
+  const [text2, setText2] = useState('Sentence 2')
+  const [text3, setText3] = useState('Sentence 3')
+  const [text4, setText4] = useState('Sentence 4')
 
-  let listOfText = ['Sentence 1', 'Sentence 2', 'Sentence 3', 'Sentence 4']
+  const [listOfLinks, setListOfLinks] = useState([''])
+  const [listOfText, setListOfText] = useState([''])
 
   const makePostRequest = async (path, queryObj, loc) => {
     axios.post(path, queryObj).then(res => {
       let result = res.data
       let imglink = result.output_link
-      setImageLink1(imglink.image)
+      switch (loc) {
+        case loc === 1:
+          setImageLink1(imglink.image)
+          break
+        case loc === 2:
+          setImageLink2(imglink.image)
+          break
+        case loc === 3:
+          setImageLink3(imglink.image)
+          break
+        case loc === 4:
+          setImageLink4(imglink.image)
+          break
+        default:
+          setImageLink1(imglink.image)
+      }
     })
   }
 
   let queryObj = null
-  const handleClick = n => {
-    let stringQuery = '' + document.getElementById(`text_${n}`)?.innerText
-    let numberQuery = document.getElementById(`queryText${n}`)?.value
-    console.log(typeof numberQuery)
+  const handleClick = (n, story) => {
+    let curN = n
+    let stringQuery = '' + document.getElementById(`text_${story}`)?.innerText
+    console.log(story)
+    let numberQuery = '' + document.getElementById(`queryText${curN}`)?.value
+    document.getElementById(`queryText${n}`).value = numberQuery
     let count = (stringQuery.match(/\n/g) || []).length
-    //console.log(count)
-    //console.log(stringQuery)
-    let result = stringQuery
-    let temp = ''
-    for (let i = 0; i < count; i++) {
-      result = stringQuery.replace('\n', ' ' + numberQuery + ' ')
-      if (result.includes('\n') === false) {
-        temp = result
-        console.log(temp)
-        break
+    if (stringQuery !== '') {
+      for (let i = 0; i < count; i++) {
+        stringQuery = stringQuery.replace('\n', ' ' + numberQuery + ' ')
+        curN++
+        numberQuery = getValue(curN)
       }
-      n++
-      numberQuery = '' + document.getElementById(`queryText${n}`)?.value
     }
-
-    console.log(result)
-    console.log(temp)
-
+    switch (story) {
+      case 1:
+        setText1(stringQuery)
+        break
+      case 2:
+        setText2(stringQuery)
+        break
+      case 3:
+        setText3(stringQuery)
+        break
+      case 4:
+        setText4(stringQuery)
+        break
+      default:
+        setText1('Sentences not completely made')
+    }
     queryObj = { queryText: stringQuery }
-    console.log('test log')
-    //makePostRequest('/getimg', queryObj, n)
+    //makePostRequest('/getimg', queryObj, story)
+  }
+
+  const getValue = num => {
+    return document.getElementById(`queryText${num}`)?.value
   }
 
   const [active, setActive] = useState(false)
   const handleStorifyButton = () => {
     setActive(!active)
+    setListOfText([text1, text2, text3, text4])
+    setListOfLinks([imageLink1, imageLink2, imageLink3, imageLink4])
+    console.log(listOfText)
+    console.log(listOfLinks)
   }
 
   const [data, setdata] = useState({
@@ -104,7 +132,7 @@ function App() {
             type='text'
             id={`queryText${n}`}
             name='queryText'
-            placeholder={`queryText${n}`}
+            placeholder={typeOfInput}
           />
           <Microphone
             onClick={
@@ -129,7 +157,7 @@ function App() {
               <p id='text_1' className='leading-[4rem] pl-3'>
                 {/*This is where a sentence will be made*/}
                 One day, the mermaid
-                <SpecialInp n={1} typeOfInput={'Noun'} />
+                <SpecialInp n={1} story={1} typeOfInput={'Noun'} />
                 was swimming when she saw a mysterious cave
                 {/*This is where a sentence will be ended*/}.
               </p>
@@ -137,7 +165,10 @@ function App() {
             <div className='flex justify-center pt-10'>
               <button
                 className='text-[28px] pl-1 pr-1 hover:bg-green-200 border-2 rounded-lg border-gray-700'
-                onClick={() => handleClick(1)}
+                onClick={() => {
+                  handleClick(1, 1)
+                  return false
+                }}
               >
                 Generate
               </button>
@@ -171,7 +202,7 @@ function App() {
             <div className='flex justify-center pt-10'>
               <button
                 className='text-[28px] pl-1 pr-1 hover:bg-green-200 border-2 rounded-lg border-gray-700'
-                onClick={() => handleClick(2)}
+                onClick={() => handleClick(2, 2)}
               >
                 Generate
               </button>
@@ -181,8 +212,8 @@ function App() {
         <div id='image side' className='flex justify-center items-center'>
           <img
             className='rounded-lg'
-            src={imageLink1}
-            alt={imageLink1}
+            src={imageLink2}
+            alt={imageLink2}
             width={384}
             height={384}
           />
@@ -195,14 +226,14 @@ function App() {
               <p id='text_3' className='leading-[4rem] pl-3'>
                 {/*This is where a sentence will be made*/}
                 The cave was mostly dark, but inside it she saw something
-                <SpecialInp n={4} typeOfInput={'Noun'} />
+                <SpecialInp n={4} story={3} typeOfInput={'Noun'} />
                 {/*This is where a sentence will be ended*/}.
               </p>
             </div>
             <div className='flex justify-center pt-10'>
               <button
                 className='text-[28px] pl-1 pr-1 hover:bg-green-200 border-2 rounded-lg border-gray-700'
-                onClick={() => handleClick(3)}
+                onClick={() => handleClick(4, 3)}
               >
                 Generate
               </button>
@@ -212,8 +243,8 @@ function App() {
         <div id='image side' className='flex justify-center items-center'>
           <img
             className='rounded-lg'
-            src={imageLink1}
-            alt={imageLink1}
+            src={imageLink3}
+            alt={imageLink3}
             width={384}
             height={384}
           />
@@ -227,7 +258,7 @@ function App() {
                 {/*This is where a sentence will be made*/}
                 As she entered the cave, she realized she was not alone! There
                 was a
-                <SpecialInp n={5} typeOfInput={'Noun'} />
+                <SpecialInp n={5} typeOfInput={'Adjective'} />
                 hermit crab watching her
                 {/*This is where a sentence will be ended*/}.
               </p>
@@ -235,7 +266,10 @@ function App() {
             <div className='flex justify-center pt-10'>
               <button
                 className='text-[28px] pl-1 pr-1 hover:bg-green-200 border-2 rounded-lg border-gray-700'
-                onClick={() => handleClick(4)}
+                onClick={() => {
+                  handleClick(5, 4)
+                  return false
+                }}
               >
                 Generate
               </button>
