@@ -58,9 +58,7 @@ function App() {
   const handleClick = (n, story) => {
     let curN = n
     let stringQuery = '' + document.getElementById(`text_${story}`)?.innerText
-    console.log(story)
     let numberQuery = '' + document.getElementById(`queryText${curN}`)?.value
-    document.getElementById(`queryText${n}`).value = numberQuery
     let count = (stringQuery.match(/\n/g) || []).length
     if (stringQuery !== '') {
       for (let i = 0; i < count; i++) {
@@ -86,7 +84,7 @@ function App() {
         setText1('Sentences not completely made')
     }
     queryObj = { queryText: stringQuery }
-    //makePostRequest('/getimg', queryObj, story)
+    makePostRequest('/getimg', queryObj, story)
   }
 
   const getValue = num => {
